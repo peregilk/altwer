@@ -22,8 +22,8 @@ This would result in an error in standard WER, despite both being correct.
 ## The Solution
 
 `altwer` addresses this issue by allowing references to specify multiple valid alternatives. The package computes the WER by considering all alternatives in the reference and selecting the one that minimizes the error. This approach makes `altwer` ideal for:
-1. **Handling Orthographic Variation**: Allows multiple correct spellings for a single word (e.g., ["matta", "matten"], ["organization","organisation"], ["email","e-mail"]).
-2. **Optional Fillers**: Handles cases where fillers like "eh" or "ah" are acceptable but not required. For example: `["eh", "uh", ""]`
+1. **Handling Orthographic Variation**: Allows multiple correct spellings. For example: `["matta", "matten"], ["organization","organisation"] or ["email","e-mail"])`.
+2. **Optional Fillers**: Handles other cases where you do not want variations to be counted as errors. For example: `["eh", "ah", "uhh","...",""]` or `["WHO", "World Health Organization"]`
 
 
 If alternate spellings is specified, the best match is computed automatically. In cases where alternate spellings are not specified **altwer** should give the same result as **jiwer**. 
