@@ -1,0 +1,1 @@
+from .altwer import wer
