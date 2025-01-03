@@ -31,7 +31,14 @@ def preprocess_eval(reference):
     return combinations
 
 
-def wer(references, hypotheses, verbose=False, empty_text="<|nospeech|>", lowercase=False, remove_punctuation=False):
+def wer(
+    references,
+    hypotheses,
+    verbose=False,
+    empty_text="<|nospeech|>",
+    lowercase=False,
+    remove_punctuation=False
+):
     """
     Calculate WER for a list of references and hypotheses, supporting multiple reference options.
 
@@ -46,33 +53,33 @@ def wer(references, hypotheses, verbose=False, empty_text="<|nospeech|>", lowerc
         remove_punctuation (bool): If True, removes punctuation from all input. Defaults to False.
 
     Returns:
-        float: The word error rate (WER).
+        float: The word error rate (WER), calculated as the average of WERs for all sentences.
     """
     if len(references) != len(hypotheses):
         raise ValueError("Length of references and hypotheses must be the same.")
 
-    total_errors = 0
-    total_words = 0
+    total_wer = 0.0
+    count = 0
 
     for idx, (reference, hypothesis) in enumerate(zip(references, hypotheses), start=1):
         hypothesis = hypothesis.strip() or empty_text
         reference = reference.strip()
-
-        # Apply preprocessing options
-        if lowercase:
-            hypothesis = hypothesis.lower()
-            reference = reference.lower()
-
-        if remove_punctuation:
-            punctuation = str.maketrans('', '', string.punctuation)
-            hypothesis = hypothesis.translate(punctuation)
-            reference = reference.translate(punctuation)
 
         # Generate all possible combinations for the reference field
         try:
             reference_combinations = preprocess_eval(reference)
         except Exception as e:
             raise ValueError(f"Error processing reference: {reference}") from e
+
+        # Apply preprocessing options to expanded references and hypotheses
+        if lowercase:
+            hypothesis = hypothesis.lower()
+            reference_combinations = [ref.lower() for ref in reference_combinations]
+
+        if remove_punctuation:
+            punctuation = str.maketrans('', '', string.punctuation)
+            hypothesis = hypothesis.translate(punctuation)
+            reference_combinations = [ref.translate(punctuation) for ref in reference_combinations]
 
         # Calculate WER for all combinations, find the closest match
         best_wer = float("inf")
@@ -100,10 +107,8 @@ def wer(references, hypotheses, verbose=False, empty_text="<|nospeech|>", lowerc
         if verbose and best_match is not None:
             print(f"Best match: '{best_match}' with WER = {best_wer:.4f}")
 
-        total_errors += int(best_wer * len(best_match.split()))
-        total_words += len(best_match.split())
+        total_wer += best_wer
+        count += 1
 
-    if total_words == 0:
-        return 0.0
-
-    return total_errors / total_words
+    # Return the average WER across sentences
+    return total_wer / count if count > 0 else 0.0
