@@ -1,4 +1,5 @@
 import jiwer
+import json
 import re
 import string
 from itertools import product
@@ -16,12 +17,12 @@ def preprocess_eval(reference):
         list: A list of all possible sentence combinations.
     """
     # Extract alternatives from brackets
-    parts = re.findall(r'\[(.*?)\]', reference)
+    parts = re.findall(r'\[.*?\]', reference)
 
     # Create a list of alternatives for each bracket
     eval_combinations = []
     for part in parts:
-        options = part.split('|')  # Split alternatives by the '|' character
+        options = json.loads(part)  # Parse the JSON array directly
         eval_combinations.append(options)
 
     # Create all combinations of sentences
@@ -43,7 +44,7 @@ def wer(
 
     Args:
         references (list): A list of reference strings, where each string may
-                           contain alternatives in brackets (e.g., ["[jenta|jenten]"]).
+                           contain alternatives in brackets (e.g., ["[\"a\",\"b\"]"]).
         hypotheses (list): A list of hypothesis strings.
         verbose (bool): If True, print detailed output. Defaults to False.
         empty_text (str): Placeholder for empty hypotheses. Defaults to "<|nospeech|>".

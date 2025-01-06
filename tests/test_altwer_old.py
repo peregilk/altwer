@@ -4,8 +4,8 @@ from altwer import wer
 
 def test_altwer_wer():
     references = [
-        "[jenta|jenten] [jogga|jogget] på [broa|broen|brua|bruen]",
-        "[katten|katta] ligger på [matta|matten]",
+        '["jenta","jenten"] ["jogga","jogget"] på ["broa","broen","brua","bruen"]',
+        '["katten","katta"] ligger på ["matta","matten"]',
         "Det var en fin dag."
     ]
     hypotheses = [
@@ -24,8 +24,8 @@ def test_altwer_wer():
 
     # Test with punctuation removal
     references_with_punct = [
-        "[jenta|jenten] jogga, på [broa|broen|brua|bruen]",
-        "[katten|katta], ligger på [matta|matten]",
+        '["jenta","jenten"] jogga, på ["broa","broen","brua","bruen"]',
+        '["katten","katta"], ligger på ["matta","matten"]',
         "Det var en fin dag!"
     ]
     hypotheses_with_punct = [

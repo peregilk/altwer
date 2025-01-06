@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="altwer",
-    version="0.1.0",
+    version="0.2.0",
     description="A package to calculate WER with multiple reference options.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    author="Your Name",
-    author_email="your.email@example.com",
-    url="https://github.com/yourusername/altwer",
+    author="Per Kummervold",
+    author_email="Per.Kummervold@nb.no",
+    url="https://github.com/peregilk/altwer",
     packages=find_packages(),
     install_requires=[
         "jiwer>=2.0.0"
