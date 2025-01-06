@@ -4,57 +4,47 @@ from openai import OpenAI
 from tqdm import tqdm
 import argparse
 
-def main():
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Process a JSON-lines file with OpenAI API.")
-    parser.add_argument("--input_file", required=True, help="Path to the input JSON-lines file.")
-    parser.add_argument("--template_file", default="casing_template.txt", help="Path to the template file (default: casing_template.txt).")
-    args = parser.parse_args()
+def process_file(input_file, template, output_file, api_key):
+    """
+    Processes a JSON-lines input file using the OpenAI API and saves the output.
 
-    input_file_path = args.input_file
-    template_file_path = args.template_file
-    output_file_path = f"{input_file_path}_processed.jsonl"
+    Args:
+        input_file (str): Path to the input JSON-lines file.
+        template (str): Template string for generating prompts.
+        output_file (str): Path to the output JSON-lines file.
+        api_key (str): API key for OpenAI.
 
-    # Read API key from environment variable
-    api_key = os.getenv("DeepSeekApi")
-    if not api_key:
-        raise EnvironmentError("Environment variable 'DeepSeekApi' is not set.")
-
+    Returns:
+        None
+    """
     # Initialize OpenAI client
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    # Read the template
-    try:
-        with open(template_file_path, "r", encoding="utf-8") as template_file:
-            template = template_file.read()
-    except FileNotFoundError:
-        raise FileNotFoundError(f"The template file '{template_file_path}' was not found.")
-
     # Check for already processed lines
     processed_count = 0
-    if os.path.exists(output_file_path):
-        with open(output_file_path, "r", encoding="utf-8") as output_file:
-            processed_count = sum(1 for _ in output_file)
+    if os.path.exists(output_file):
+        with open(output_file, "r", encoding="utf-8") as output:
+            processed_count = sum(1 for _ in output)
 
     # Count total lines in the input file
-    with open(input_file_path, "r", encoding="utf-8") as input_file:
-        total_lines = sum(1 for _ in input_file)
+    with open(input_file, "r", encoding="utf-8") as input_f:
+        total_lines = sum(1 for _ in input_f)
 
     try:
-        with open(input_file_path, "r", encoding="utf-8") as input_file, \
-             open(output_file_path, "a", encoding="utf-8") as output_file:
+        with open(input_file, "r", encoding="utf-8") as input_f, \
+             open(output_file, "a", encoding="utf-8") as output_f:
 
             # Skip already processed lines
             for _ in range(processed_count):
-                next(input_file)
+                next(input_f)
 
             # Process remaining lines with a progress bar
             with tqdm(total=total_lines, initial=processed_count, desc="Processing") as progress_bar:
-                for line in input_file:
+                for line in input_f:
                     # Parse the JSON object
                     data = json.loads(line.strip())
 
-                    # Ensure the JSON object contains the required fields
+                    # Ensure required fields are present
                     if "verbatim" not in data or "orthographic" not in data:
                         raise ValueError("Each line in the input file must contain 'verbatim' and 'orthographic' fields.")
 
@@ -64,7 +54,7 @@ def main():
                         orthographic=data["orthographic"]
                     )
 
-                    # Generate response
+                    # Generate response from the API
                     response = client.chat.completions.create(
                         model="deepseek-chat",
                         messages=[
@@ -74,21 +64,18 @@ def main():
                         stream=False
                     )
 
-                    # Extract the JSON content from the assistant's message
+                    # Extract and parse the JSON content from the response
                     content = response.choices[0].message.content.strip()
-
-                    # Parse the JSON block inside the content
                     try:
                         if content.startswith("```json") and content.endswith("```"):
                             json_block = content[7:-3].strip()
                         else:
                             json_block = content
-
                         parsed_json = json.loads(json_block)
                     except json.JSONDecodeError as e:
                         raise ValueError(f"Failed to parse JSON content: {e}")
 
-                    # Safely extract new fields
+                    # Add the new fields to the original data
                     data["orthographic-casing"] = parsed_json.get("orthographic-casing", "N/A")
                     data["verbatim-casing"] = parsed_json.get("verbatim-casing", "N/A")
 
@@ -97,15 +84,68 @@ def main():
                         print(f"Warning: Missing expected fields in model output for input: {data}")
 
                     # Write the updated JSON object to the output file
-                    json.dump(data, output_file)
-                    output_file.write("\n")  # Ensure newline for JSONLines format
+                    json.dump(data, output_f)
+                    output_f.write("\n")  # Ensure newline for JSONLines format
 
                     # Update progress bar
                     progress_bar.update(1)
     except FileNotFoundError:
-        raise FileNotFoundError(f"The file '{input_file_path}' was not found.")
+        raise FileNotFoundError(f"The file '{input_file}' was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+def load_template(template_file):
+    """
+    Loads the template file.
+
+    Args:
+        template_file (str): Path to the template file.
+
+    Returns:
+        str: Template content as a string.
+    """
+    try:
+        with open(template_file, "r", encoding="utf-8") as file:
+            return file.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The template file '{template_file}' was not found.")
+
+
+def calculate_output_filename(input_file):
+    """
+    Generates the output filename based on the input filename.
+
+    Args:
+        input_file (str): Input filename.
+
+    Returns:
+        str: Output filename.
+    """
+    base_name = os.path.splitext(input_file)[0]
+    return f"{base_name}_processed.jsonl"
+
+
 if __name__ == "__main__":
-    main()
+    # Argument parsing
+    parser = argparse.ArgumentParser(description="Process a JSON-lines file with OpenAI API.")
+    parser.add_argument("--input_file", required=True, help="Path to the input JSON-lines file.")
+    parser.add_argument("--template_file", default="casing_template.txt", help="Path to the template file (default: casing_template.txt).")
+    args = parser.parse_args()
+
+    # Load environment variables
+    api_key = os.getenv("DeepSeekApi")
+    if not api_key:
+        raise EnvironmentError("Environment variable 'DeepSeekApi' is not set.")
+
+    # Load template and calculate output file name
+    template_content = load_template(args.template_file)
+    output_file_name = calculate_output_filename(args.input_file)
+
+    # Process the file
+    process_file(
+        input_file=args.input_file,
+        template=template_content,
+        output_file=output_file_name,
+        api_key=api_key
+    )
