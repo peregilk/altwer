@@ -1,9 +1,10 @@
 # altwer
 
-`altwer` is a Python package designed for evaluating automatic speech recognition (ASR) results, particularly for languages where multiple correct spellings or expressions of the same word are acceptable. This phenomenon, known as **orthographic variation** or **linguistic variability**, is common in languages like Norwegian, Danish, Dutch, and some dialect-rich languages, where regional or formal differences influence spelling and vocabulary. Other languages might allow spellings like both "e-mail" and "email". 
+`altwer` is a Python package designed for evaluating automatic speech recognition (ASR) results, particularly for languages where multiple correct spellings or expressions of the same word are acceptable. This phenomenon, known as **orthographic variation** or **linguistic variability**, is common in languages like Norwegian, Danish, Dutch, and some dialect-rich languages, where regional or formal differences influence spelling and vocabulary. Other languages might allow spellings like both "e-mail" and "email".
 
 For instance, in Norwegian, both "matta" and "matten" might be correct spelling of "the mat" depending on regional usage or style, just as both "broa" and "broen" are valid spellings for "the bridge." Such variability poses challenges for ASR evaluation, as standard WER metrics treat these as errors.
 
+---
 
 ## The Problem
 
@@ -22,12 +23,12 @@ This would result in an error in standard WER, despite both being correct.
 ## The Solution
 
 `altwer` addresses this issue by allowing references to specify multiple valid alternatives. The package computes the WER by considering all alternatives in the reference and selecting the one that minimizes the error. This approach makes `altwer` ideal for:
-1. **Handling Orthographic Variation**: Allows multiple correct spellings. For example: `["matta", "matten"], ["organization","organisation"] or ["email","e-mail"])`.
-2. **Optional Fillers**: Handles other cases where you do not want variations to be counted as errors. For example: `["eh", "ah", "uhh","...",""]` or `["WHO", "World Health Organization"]`
+1. **Handling Orthographic Variation**: Allows multiple correct spellings. For example: `[matta|matten]` or `[organization|organisation]` or `[email|e-mail]`.
+2. **Optional Fillers**: Handles other cases where you do not want variations to be counted as errors. For example: `[eh|ah|uhh|...|]` or `[WHO|World Health Organization]`.
 
+If alternate spellings are specified, the best match is computed automatically. In cases where alternate spellings are not specified, **altwer** should give the same result as **jiwer**.
 
-If alternate spellings is specified, the best match is computed automatically. In cases where alternate spellings are not specified **altwer** should give the same result as **jiwer**. 
-
+---
 
 ## Installation
 
@@ -43,8 +44,8 @@ pip install altwer
 from altwer import wer
 
 references = [
-    '["jenta","jenten"] ["jogga","jogget"] på ["broa","broen","brua","bruen"]',
-    '["katten","katta"] ligger på ["matta","matten"]',
+    "[jenta|jenten] [jogga|jogget] på [broa|broen|brua|bruen]",
+    "[katten|katta] ligger på [matta|matten]",
     "Det var en fin dag."
 ]
 hypotheses = [
