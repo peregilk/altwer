@@ -1,0 +1,9 @@
+Dette er en såkalt ortografisk versjon fra et asr treningssett:
+"{orthographic}"
+
+Dette er en såkalt verbatim versjon av det samme utsagnet:
+"{verbatim}"
+
+Lag først en verbatim versjon med tegnsetting og store/små bokstaver. Lag deretter en ortografisk versjon med tegnsetting og store/små bokstaver. I den verbatime versjonen kan du gjerne bruke ellipser (…), gjerne sammen med såkalte filler-ord som "eee" og "hmm",  for å gjøre teksten enklere å lese. I den ortografiske versjonen skal du kun bruke ellipser hvis det ikke er andre måter å skrive teksten på.
+
+Output skal kun være en json-lines linje med feltene orthographic-casing og verbatim-casing.
