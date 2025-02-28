@@ -20,14 +20,20 @@ This would result in an error in standard WER, despite both being correct.
 
 ---
 
-## The Solution
+## The Suggested Solution
 
-`altwer` addresses this issue by allowing references to specify multiple valid alternatives. The package computes the WER by considering all alternatives in the reference and selecting the one that minimizes the error. This approach makes `altwer` ideal for:
-1. **Handling Orthographic Variation**: Allows multiple correct spellings. For example: `[matta|matten]` or `[organization|organisation]` or `[email|e-mail]`.
-2. **Optional Fillers**: Handles other cases where you do not want variations to be counted as errors. For example: `[eh|ah|uhh|...|]` or `[WHO|World Health Organization]`.
+`altwer` addresses this issue by allowing references to specify multiple valid alternatives. 
+
+1. The `altwer`-package computes the WER by considering all alternatives in the reference and selecting the one that minimizes the error. This approach makes `altwer` ideal for:
+- **Handling Orthographic Variation**: Allows multiple correct spellings. For example: `[matta|matten]` or `[organization|organisation]` or `[email|e-mail]`.
+- **Optional Fillers**: Handles other cases where you do not want variations to be counted as errors. For example: `[eh|ah|uhh|...|]` or `[WHO|World Health Organization]`.
 
 If alternate spellings are specified, the best match is computed automatically. In cases where alternate spellings are not specified, **altwer** should give the same result as **jiwer**.
 
+2. Use LLMs to automate the creation of this format. Experiments indicates that prompted correctly a Reasoning-model is able to create at least a first draft of this format. We provide some example tempates for doing the conversion.
+- [Norwegian Bokmål example template](norwegian_template.txt]
+- [English example template](english_template.txt)
+  
 ---
 
 ## Installation
