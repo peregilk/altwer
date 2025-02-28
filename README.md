@@ -30,7 +30,7 @@ This would result in an error in standard WER, despite both being correct.
 
 
 2. Use LLMs to automate the creation of this format. Experiments indicates that prompted correctly a Reasoning-model is able to create at least a first draft of this format. We provide some example tempates for doing the conversion.
-- [Norwegian Bokmål example template](norwegian_template.txt]
+- [Norwegian Bokmål example template](norwegian_template.txt)
 - [English example template](english_template.txt)
   
 ---
