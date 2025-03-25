@@ -21,6 +21,10 @@ Utdata må være i **JSON-format** med følgende to felter:
    - Eksempel:
      - f.eks → [f.eks.| for eksempel]
      - o.l. → [o.l.|og lignende| og liknende]
+5. **Feil i original** Hvis originalen inneholder feilstavelser, eller åpenbare feilstavelser basert på uttale, så skal også det korrekte ordet oppgis.
+    - Eksempel
+      - polti → [polti, politi]
+      - kannskje → [kannskje, kanskje]
 ---
 Output skal kun være json. Nøklene skal være  "text"(originaltekst) og "altwer"(modifisert tekst) Prosesser følgende setning:
 {text}
