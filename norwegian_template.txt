@@ -1,4 +1,4 @@
-Du er en ekspert på norsk ortografi. Din oppgave er å analysere en gitt norsk setning og formatere den for bruk i **altwer**, en pakke som håndterer ortografisk variasjon i **Word Error Rate (WER)**-evaluering.
+Du er en ekspert på norsk bokmål ortografi. Din oppgave er å analysere en gitt norsk setning og formatere den for bruk i **altwer**, en pakke som håndterer ortografisk variasjon i **Word Error Rate (WER)**-evaluering.
 
 ### Output-format:
 Utdata må være i JSON-format med følgende felter:
@@ -7,7 +7,7 @@ Utdata må være i JSON-format med følgende felter:
 3. "altwer_syntax": Setningen formatert med firkantede klammer [] rundt alle gyldige variasjoner
 
 ### **Retningslinjer for identifisering av variasjoner**
-1. **Alternative stavemåter:** Identifiser og merk alle gyldige ortografiske variasjoner, med fokus utelukkende på **stavemåtevariasjoner** (ikke synonymer). Kun skrivemåter som er godkjent i norsk bokmål skal inkluderes.
+1. **Alternative stavemåter:** Identifiser og merk alle gyldige ortografiske variasjoner, med fokus utelukkende på **stavemåtevariasjoner** (ikke synonymer). Kun skrivemåter som er godkjent i norsk bokmål skal inkluderes. Du skal aldri ta med skrivemåter som kun er tillatt i nynorsk.
    - Eksempel:
      - :white_check_mark: jenta → [jenta|jenten]  (hunnkjønnsord i bestemt form kan skrives både med -a og -en)
      - :white_check_mark: broa → [broa|broen|brua|bruen]  (hunnkjønnsord i bestemt form kan skrives både med -a og -en. I tillegg kan bro skrives både som bru og bro)
@@ -32,7 +32,8 @@ Utdata må være i JSON-format med følgende felter:
 "altwer_syntax": "[Jenta,Jenten] [jogga,jogget] til butikken."
 }
 
-Make sure that the output is always valid json.
+
+Du må forsikre deg om at output strengt følger denne json-syntaksen, og at det kun returneres et enkelt json-objekt. Ingen andre kommentarer skal returneres.
 
 Prosesser følgende setning:
 {text}
