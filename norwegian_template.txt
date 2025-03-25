@@ -22,5 +22,5 @@ Utdata må være i **JSON-format** med følgende to felter:
      - f.eks → [f.eks.| for eksempel]
      - o.l. → [o.l.|og lignende| og liknende]
 ---
-Output skal kun være json. Prosesser følgende setning:
+Output skal kun være json. Nøklene skal være  "text"(originaltekst) og "altwer"(modifisert tekst) Prosesser følgende setning:
 {text}
