@@ -6,24 +6,33 @@ Utdata må være i JSON-format med følgende felter:
 2. "altwer_reasoning": En detaljert gjennomgang av hvert ord som forklarer ortografiske variasjoner
 3. "altwer_syntax": Setningen formatert med firkantede klammer [] rundt alle gyldige variasjoner
 
-### Retningslinjer:
-1. **Stavemåtevariasjoner:** Fokuser kun på ortografiske forskjeller, ikke synonymer
-   - Eksempel: jenta → [jenta|jenten]
-2. **Tall:** Inkluder både siffer- og ordform
-   - Eksempel: 19 → [19|nitten]
-3. **Fyllord:** Inkluder tomt alternativ hvis relevant
-   - Eksempel: ehhh → [eh|ehh|ehhh| ]
-4. **Forkortelser:** Inkluder både kort og full form
-   - Eksempel: f.eks → [f.eks.|for eksempel]
-5. **Feilretting:** Legg til korrekt stavemåte ved åpenbare feil
-   - Eksempel: kannskje → [kannskje|kanskje]
+### **Retningslinjer for identifisering av variasjoner**
+1. **Alternative stavemåter:** Identifiser og merk alle gyldige ortografiske variasjoner, med fokus utelukkende på **stavemåtevariasjoner** (ikke synonymer). Kun skrivemåter som er godkjent i norsk bokmål skal inkluderes.
+   - Eksempel:
+     - :white_check_mark: jenta → [jenta|jenten]  (hunnkjønnsord i bestemt form kan skrives både med -a og -en)
+     - :white_check_mark: broa → [broa|broen|brua|bruen]  (hunnkjønnsord i bestemt form kan skrives både med -a og -en. I tillegg kan bro skrives både som bru og bro)
+     - :white_check_mark: jogga → [jogga|jogget] (svake verb i preteritum kan skrives både med -a og -et)
+     - :x: hund → [hund|bikkje] (Feil, fordi "bikkje" er et synonym, ikke en ortografisk variant.)
+2. **Tall:** Hvis setningen inneholder **tall**, oppgi både **siffer- og ordform**.
+   - Eksempel:
+     - 19 → [19|nitten]
+     - 21 → [21|tjueen|enogtjue]
+3. **Fyllord og utelatelser:** Hvis setningen inneholder **fyllord** (f.eks. _eh, ehh, ehhh_), oppgi alle naturlige variasjoner og **inkluder et tomt alternativ (" ")** hvis fyllordet kan utelates.
+   - Eksempel:
+     - ehhh → [eh|ehh|ehhh| ]
+4. **Forkortelser** Hvis et ord har både **muntlige** og **standard** stavemåter, oppgi begge.
+   - Eksempel:
+     - f.eks → [f.eks.| for eksempel]
+     - o.l. → [o.l.|og lignende| og liknende]
 
 ### Output-eksempel:
 {
-  "text": "Original setning her",
+  "text": "Jenta jogga til butikken.",
   "altwer_reasoning": "Detaljert forklaring...",
-  "altwer_syntax": "Setning [med|med] [ortografiske|ortografiske] variasjoner"
+"altwer_syntax": "[Jenta,Jenten] [jogga,jogget] til butikken."
 }
+
+Make sure that the output is always valid json.
 
 Prosesser følgende setning:
 {text}
