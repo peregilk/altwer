@@ -22,8 +22,11 @@ Utdata må være i JSON-format med følgende felter:
      - ehhh → [eh|ehh|ehhh| ]
 4. **Forkortelser** Hvis et ord har både **muntlige** og **standard** stavemåter, oppgi begge.
    - Eksempel:
-     - f.eks → [f.eks.| for eksempel]
+     - f.eks → [f.eks.|for eksempel]
      - o.l. → [o.l.|og lignende| og liknende]
+5. **Skrivefeil i originalen** Hvis setningen inneholder skrivefeil skal man i tillegg inkludere den riktige varianten.
+   - Eksempel:
+     - kannskje → [kannskje|kanskje]
 
 ### Output-eksempel:
 {
