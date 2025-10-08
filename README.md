@@ -64,10 +64,10 @@ wer_score = wer(references, hypotheses, verbose=True, lowercase=True, remove_pun
 print(f"WER: {wer_score:.4f}")
 ```
 
-## Version 0.3.0
+## Version 0.4.0
 
-- Updated `altwer` to work with the latest `jiwer` releases while keeping backwards compatibility.
-- The reference parser now supports both pipe-separated and legacy JSON-style alternative formats.
+- Ensures compatibility with the latest `jiwer` API while remaining backwards compatible.
+- Supports both pipe-separated and legacy JSON-style reference alternatives when expanding matches.
 
 ## License
 
