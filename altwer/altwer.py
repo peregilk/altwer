@@ -1,4 +1,3 @@
-import json
 import re
 import string
 from itertools import product
@@ -21,16 +20,9 @@ def _compute_wer(reference, hypothesis):
 def _extract_options(part):
     """
     Return the possible alternatives represented within a single bracket.
-    Supports both the modern pipe-separated format and the legacy JSON array format.
+    Supports the pipe-separated format, trimming whitespace around each option.
     """
-    if "|" in part:
-        return [option.strip() for option in part.split("|")]
-
-    try:
-        parsed = json.loads(f"[{part}]")
-        return [str(option) for option in parsed]
-    except json.JSONDecodeError:
-        return [part.strip()]
+    return [option.strip() for option in part.split("|")]
 
 
 def preprocess_eval(reference):
